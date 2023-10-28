@@ -8,6 +8,7 @@ package command
 import (
 	"context"
 	"runtime"
+	"strings" //song
 	"time"
 
 	grpc "google.golang.org/grpc"
@@ -38,6 +39,21 @@ func (s *statsServer) GetStats(ctx context.Context, request *GetStatsRequest) (*
 		return nil, newError(request.Name, " not found.")
 	}
 	var value int64
+	// song try get ips counter
+	if strings.Contains(request.Name, ">>>traffic>>>ips") {
+		var ipstr string
+		value, ipstr = c.GetIP()
+		if request.Reset_ {
+			c.ResetIP()
+		}
+		return &GetStatsResponse{
+			Stat: &Stat{
+				Name:  ipstr,
+				Value: value,
+			},
+		}, nil
+	}
+	//
 	if request.Reset_ {
 		value = c.Set(0)
 	} else {

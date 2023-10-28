@@ -19,6 +19,12 @@ type Counter interface {
 	Set(int64) int64
 	// Add adds a value to the current counter value, and returns the previous value.
 	Add(int64) int64
+	// add ip
+	AddIP(string)
+	//
+	GetIP() (int64, string)
+	//
+	ResetIP()
 }
 
 // Channel is the interface for stats channel.
